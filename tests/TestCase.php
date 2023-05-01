@@ -33,9 +33,9 @@ class TestCase extends Orchestra
 
     private function createEnumFolders(): void
     {
-        mkdir(base_path('resources'));
-        mkdir(base_path('resources/ts'));
-        mkdir(base_path('resources/ts/types'));
+        mkdir(resource_path());
+        mkdir(resource_path('ts'));
+        mkdir(resource_path('ts/types'));
         mkdir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'));
         mkdir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'));
     }
