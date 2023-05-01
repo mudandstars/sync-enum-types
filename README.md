@@ -2,18 +2,10 @@
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/mudandstars/sync-enum-types.svg?style=flat-square)](https://packagist.org/packages/mudandstars/sync-enum-types)
 [![GitHub Tests Action Status](https://img.shields.io/github/actions/workflow/status/mudandstars/sync-enum-types/run-tests.yml?branch=main&label=tests&style=flat-square)](https://github.com/mudandstars/sync-enum-types/actions?query=workflow%3Arun-tests+branch%3Amain)
-[![GitHub Code Style Action Status](https://img.shields.io/github/actions/workflow/status/mudandstars/sync-enum-types/fix-php-code-style-issues.yml?branch=main&label=code%20style&style=flat-square)](https://github.com/mudandstars/sync-enum-types/actions?query=workflow%3A"Fix+PHP+code+style+issues"+branch%3Amain)
 [![Total Downloads](https://img.shields.io/packagist/dt/mudandstars/sync-enum-types.svg?style=flat-square)](https://packagist.org/packages/mudandstars/sync-enum-types)
 
-This is where your description should go. Limit it to a paragraph or two. Consider adding a small example.
-
-## Support us
-
-[<img src="https://github-ads.s3.eu-central-1.amazonaws.com/sync-enum-types.jpg?t=1" width="419px" />](https://spatie.be/github-ad-click/sync-enum-types)
-
-We invest a lot of resources into creating [best in class open source packages](https://spatie.be/open-source). You can support us by [buying one of our paid products](https://spatie.be/open-source/support-us).
-
-We highly appreciate you sending us a postcard from your hometown, mentioning which of our package(s) you are using. You'll find our address on [our contact page](https://spatie.be/about-us). We publish all received postcards on [our virtual postcard wall](https://spatie.be/open-source/postcards).
+This package ships a command that creates typescript declaration files for your php Enums.
+This command can be set so it automatically runs on-save, for example.
 
 ## Installation
 
@@ -43,18 +35,10 @@ return [
 ];
 ```
 
-Optionally, you can publish the views using
 
-```bash
-php artisan vendor:publish --tag="sync-enum-types-views"
-```
+## Usage to run on-save in VS Code
 
-## Usage
-
-```php
-$syncEnumTypes = new Mudandstars\SyncEnumTypes();
-echo $syncEnumTypes->echoPhrase('Hello, Mudandstars!');
-```
+Use the emeraldwalk 'Run on Save' Extension and have the 'sync-enum-types' command execute on-save.
 
 ## Testing
 
