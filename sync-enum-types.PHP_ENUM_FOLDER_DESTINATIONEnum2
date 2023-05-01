@@ -1,9 +1,0 @@
-<?php
-
-namespace App\Enum;
-
-enum Enum2: string
-{
-    case CASE_2_1 = 'first case second enum';
-    case CASE_2_2 = 'second case second enum';
-}

@@ -17,6 +17,13 @@ class TestCase extends Orchestra
         $this->createEnumFilesInBackend();
     }
 
+    protected function tearDown(): void
+    {
+        $this->removeEnumFilesAndFiles();
+
+        parent::tearDown();
+    }
+
     protected function getPackageProviders($app)
     {
         return [
@@ -48,6 +55,10 @@ class TestCase extends Orchestra
         $phpDirPath = config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION');
 
         foreach ([$typescriptDirPath, $phpDirPath] as $dirPath) {
+            if (! is_dir($dirPath)) {
+                continue;
+            }
+
             foreach (scandir($dirPath) as $filePath) {
                 $path = $dirPath.'/'.$filePath;
 
@@ -57,10 +68,41 @@ class TestCase extends Orchestra
             }
         }
 
-        rmdir($typescriptDirPath);
-        rmdir($phpDirPath);
-        rmdir(base_path('resources/ts/types'));
-        rmdir(base_path('resources/ts'));
-        rmdir(base_path('resources'));
+        $this->removeDirectories([
+            base_path('resources'),
+            $phpDirPath,
+        ]);
+    }
+
+    private function removeDirectories(array $paths): void
+    {
+        foreach ($paths as $path) {
+            if (is_dir($path) && count(scandir($path)) > 2) {
+                $childPaths = scandir($path);
+                unset($childPaths[array_search('.', $childPaths)]);
+                unset($childPaths[array_search('..', $childPaths)]);
+
+                foreach ($childPaths as $childPath) {
+                    if ($childPath === 'Enum') {
+                    }
+                    $this->removeFileOrDirectory($path . '/' . $childPath);
+                }
+
+                $this->removeFileOrDirectory($path);
+            }
+
+            if (is_dir($path)) {
+                rmdir($path);
+            }
+        }
+    }
+
+    private function removeFileOrDirectory(string $path): void
+    {
+        if (is_dir($path)) {
+            $this->removeDirectories([$path]);
+        } else {
+            unlink($path);
+        }
     }
 }
