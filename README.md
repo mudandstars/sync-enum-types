@@ -12,38 +12,13 @@ This command can be set so it automatically runs on-save, for example.
 You can install the package via composer:
 
 ```bash
-composer require mudandstars/sync-enum-types
-```
-
-You can publish and run the migrations with:
-
-```bash
-php artisan vendor:publish --tag="sync-enum-types-migrations"
-php artisan migrate
+composer require mudandstars/sync-enum-types --dev
 ```
 
 You can publish the config file with:
 
 ```bash
 php artisan vendor:publish --tag="sync-enum-types-config"
-```
-
-This is the contents of the published config file:
-
-```php
-return [
-];
-```
-
-
-## Usage to run on-save in VS Code
-
-Use the emeraldwalk 'Run on Save' Extension and have the 'sync-enum-types' command execute on-save.
-
-## Testing
-
-```bash
-composer test
 ```
 
 ## Changelog
