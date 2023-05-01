@@ -49,7 +49,7 @@ class SyncEnumTypesAction
     {
         $typeName = trim($filePath, '.php');
 
-        $destinationPath =config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION').$typeName.'.d.ts';
+        $destinationPath = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION').'/'.$typeName.'.d.ts';
 
         file_put_contents($destinationPath, $this->stubContents($typeName, $values));
     }
@@ -65,6 +65,6 @@ class SyncEnumTypesAction
         $valuesAsStrings = array_map(fn ($value) => "'".$value."'", $values);
         $possibleTypesString = implode(' | ', $valuesAsStrings);
 
-        return $contents.$possibleTypesString.';';
+        return preg_replace('/\r|\n|"""/', '', $contents).$possibleTypesString.';';
     }
 }
