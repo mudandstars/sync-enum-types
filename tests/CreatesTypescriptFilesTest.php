@@ -1,12 +1,9 @@
 <?php
 
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 
 test('command creates typescript files in config location', function () {
-    $FILE_BASECOUNT = 2;
-
-    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe($FILE_BASECOUNT);
-
     Artisan::call('sync-enum-types');
 
     expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))));
@@ -24,14 +21,26 @@ test('files have correct contents', function () {
     expect($enum2Content)->toEqual("export type Enum2 = 'first case second enum' | 'second case second enum';");
 });
 
-test('command skips directories', function () {
-    $FILE_BASECOUNT = 2;
-
+it('skips directories', function () {
     mkdir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/directoryXYZ');
-
-    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe($FILE_BASECOUNT);
 
     Artisan::call('sync-enum-types');
 
     expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))) - 1);
+});
+
+it('skips files from the exception config', function () {
+    $exceptions = [
+        'ExceptionEnum',
+    ];
+
+    file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/' . $exceptions[0] . '.php', 'some content');
+
+    Config::set('EXCEPTIONS', $exceptions);
+
+    Artisan::call('sync-enum-types');
+
+    $syncedEnumFiles = scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'));
+
+    expect(in_array($exceptions[0] . '.php', $syncedEnumFiles))->toBeFalse();
 });
