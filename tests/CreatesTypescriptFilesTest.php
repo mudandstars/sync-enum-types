@@ -9,7 +9,7 @@ test('command creates typescript files in config location', function () {
 
     Artisan::call('sync-enum-types');
 
-    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))));
+    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))));
 });
 
 test('files have correct contents', function () {
@@ -22,4 +22,16 @@ test('files have correct contents', function () {
 
     $enum2Content = file_get_contents($typescriptDirPath.'/Enum2.d.ts');
     expect($enum2Content)->toEqual("export type Enum2 = 'first case second enum' | 'second case second enum';");
+});
+
+test('command skips directories', function () {
+    $FILE_BASECOUNT = 2;
+
+    mkdir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/directoryXYZ');
+
+    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe($FILE_BASECOUNT);
+
+    Artisan::call('sync-enum-types');
+
+    expect(count(scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))) - 1);
 });

@@ -19,14 +19,20 @@ class SyncEnumTypesAction
             if (! is_dir($enumFilePath)) {
                 $values = $this->getFileContents($enumFilesDir, $enumFilePath);
 
-                $this->writeTypescriptFile($values, $enumFilePath);
+                if ($values) {
+                    $this->writeTypescriptFile($values, $enumFilePath);
+                }
             }
         }
     }
 
-    private function getFileContents(string $dirPath, string $filePath): array
+    private function getFileContents(string $dirPath, string $filePath)
     {
         $path = $dirPath.'/'.$filePath;
+
+        if (is_dir($path)) {
+            return;
+        }
 
         $file = fopen($path, 'r');
 
