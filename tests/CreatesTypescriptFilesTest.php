@@ -33,14 +33,13 @@ it('skips files from the exception config', function () {
     $exceptions = [
         'ExceptionEnum',
     ];
+    Config::set('sync-enum-types.EXCEPTIONS', $exceptions);
 
-    file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/' . $exceptions[0] . '.php', 'some content');
-
-    Config::set('EXCEPTIONS', $exceptions);
+    file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/'.$exceptions[0].'.php', 'some content');
 
     Artisan::call('sync-enum-types');
 
     $syncedEnumFiles = scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'));
 
-    expect(in_array($exceptions[0] . '.php', $syncedEnumFiles))->toBeFalse();
+    expect(in_array($exceptions[0].'.d.ts', $syncedEnumFiles))->toBeFalse();
 });

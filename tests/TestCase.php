@@ -85,7 +85,7 @@ class TestCase extends Orchestra
                 foreach ($childPaths as $childPath) {
                     if ($childPath === 'Enum') {
                     }
-                    $this->removeFileOrDirectory($path . '/' . $childPath);
+                    $this->removeFileOrDirectory($path.'/'.$childPath);
                 }
 
                 $this->removeFileOrDirectory($path);

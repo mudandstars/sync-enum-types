@@ -16,23 +16,19 @@ class SyncEnumTypesAction
         }
 
         foreach ($enumFiles as $enumFilePath) {
-            if (! is_dir($enumFilePath)) {
-                $values = $this->getFileContents($enumFilesDir, $enumFilePath);
-
-                if ($values) {
-                    $this->writeTypescriptFile($values, $enumFilePath);
-                }
+            if (is_dir($enumFilesDir.'/'.$enumFilePath) || in_array(trim($enumFilePath, '.php'), config('sync-enum-types.EXCEPTIONS'))) {
+                continue;
             }
+
+            $values = $this->getFileContents($enumFilesDir, $enumFilePath);
+
+            $this->writeTypescriptFile($values, $enumFilePath);
         }
     }
 
-    private function getFileContents(string $dirPath, string $filePath)
+    private function getFileContents(string $dirPath, string $filePath): array
     {
         $path = $dirPath.'/'.$filePath;
-
-        if (is_dir($path)) {
-            return;
-        }
 
         $file = fopen($path, 'r');
 
