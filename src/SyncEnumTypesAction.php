@@ -50,9 +50,9 @@ class SyncEnumTypesAction
     private function correctValue(string $line): string
     {
         if (str_contains($line, "';")) {
-            return "'" . (new Substring($line))->between("'", "'") . "'";
+            return "'".(new Substring($line))->between("'", "'")."'";
         } else {
-            return '"' . (new Substring($line))->between('"', '"') . '"';
+            return '"'.(new Substring($line))->between('"', '"').'"';
         }
     }
 
