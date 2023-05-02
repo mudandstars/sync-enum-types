@@ -21,6 +21,27 @@ You can publish the config file with:
 php artisan vendor:publish --tag="sync-enum-types-config"
 ```
 
+## Usage (VS Code)
+
+1. Check if the published config needs changes, based on your project structure
+2. Install the 'Run on Save' Extension
+3. Add the 'Run on Save' command to your settings.json (I like the workspace settings for this):
+
+```json
+{
+	// ...other settings
+
+	"emeraldwalk.runonsave": {
+		"commands": [
+			{
+				"match": ".*/Enum/.*\\.php$",
+				"cmd": "php artisan sync-enum-types"
+			}
+		]
+	}
+}
+```
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
@@ -35,8 +56,8 @@ Please review [our security policy](../../security/policy) on how to report secu
 
 ## Credits
 
-- [Paul Sochiera](https://github.com/mudandstars)
-- [All Contributors](../../contributors)
+-   [Paul Sochiera](https://github.com/mudandstars)
+-   [All Contributors](../../contributors)
 
 ## License
 
