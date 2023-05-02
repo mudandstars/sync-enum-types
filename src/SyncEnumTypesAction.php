@@ -37,7 +37,7 @@ class SyncEnumTypesAction
         if ($file) {
             while (($line = fgets($file)) !== false) {
                 if (str_contains($line, 'case')) {
-                    array_push($values, (new Substring($line))->between("'", "'"));
+                    array_push($values, $this->correctValue($line));
                 }
             }
 
@@ -45,6 +45,15 @@ class SyncEnumTypesAction
         }
 
         return $values;
+    }
+
+    private function correctValue(string $line): string
+    {
+        if (str_contains($line, "';")) {
+            return "'" . (new Substring($line))->between("'", "'") . "'";
+        } else {
+            return '"' . (new Substring($line))->between('"', '"') . '"';
+        }
     }
 
     private function writeTypescriptFile(array $values, string $filePath): void
@@ -64,8 +73,7 @@ class SyncEnumTypesAction
             $contents = str_replace('{{ '.$search.' }}', $replace, $contents);
         }
 
-        $valuesAsStrings = array_map(fn ($value) => "'".$value."'", $values);
-        $possibleTypesString = implode(' | ', $valuesAsStrings);
+        $possibleTypesString = implode(' | ', $values);
 
         return preg_replace('/\r|\n|"""/', '', $contents).$possibleTypesString.';';
     }
