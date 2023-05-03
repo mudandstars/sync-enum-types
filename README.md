@@ -29,7 +29,7 @@ php artisan vendor:publish --tag="sync-enum-types-config"
 
 ```json
 {
-	// ...other settings
+	...other settings
 
 	"emeraldwalk.runonsave": {
 		"commands": [
