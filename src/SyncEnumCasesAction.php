@@ -2,13 +2,13 @@
 
 namespace Mudandstars\SyncEnumTypes;
 
-class SyncEnumTypesAction extends SyncEnumAction
+class SyncEnumCasesAction extends SyncEnumAction
 {
-    protected string $stubPath = __DIR__.'/../src/stubs/typescript_type.stub';
+    protected string $stubPath = __DIR__.'/../src/stubs/typescript_cases.stub';
 
     public function __construct()
     {
-        $this->destinationFolder = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION');
+        $this->destinationFolder = config('sync-enum-types.CASES_FOLDER_DESTINATION');
     }
 
     public function stubContents(string $fileName, array $values): string
@@ -19,8 +19,10 @@ class SyncEnumTypesAction extends SyncEnumAction
             $contents = str_replace('{{ '.$search.' }}', $replace, $contents);
         }
 
-        $possibleTypesString = implode(' | ', $values);
+        $insert = "\n\t" . implode(",\n\t", $values) . ",";
 
-        return preg_replace('/\r|\n|"""/', '', $contents).$possibleTypesString.';';
+        $newStr = str_replace("\n\n", $insert . "\n", $contents);
+
+        return $newStr;
     }
 }
