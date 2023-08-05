@@ -24,6 +24,8 @@ jobs:
         run: |
           mkdir -p database
           touch database/database.sqlite
+      - name: Type Coverage
+        run: vendor/bin/pest --type-coverage --min=100
       - name: Execute tests via Pest
         env:
           DB_CONNECTION: sqlite
