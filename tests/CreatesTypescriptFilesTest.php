@@ -14,10 +14,10 @@ test('files have correct contents', function () {
 
     $typescriptDirPath = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION');
 
-    $enum1Content = file_get_contents($typescriptDirPath.'/Enum1.d.ts');
+    $enum1Content = file_get_contents($typescriptDirPath.'/Enum1.ts');
     expect($enum1Content)->toEqual("export type Enum1 = 'first case' | \"second's case\";");
 
-    $enum2Content = file_get_contents($typescriptDirPath.'/Enum2.d.ts');
+    $enum2Content = file_get_contents($typescriptDirPath.'/Enum2.ts');
     expect($enum2Content)->toEqual("export type Enum2 = 'first case second enum' | 'second case second enum';");
 });
 
@@ -41,5 +41,5 @@ it('skips files from the exception config', function () {
 
     $syncedEnumFiles = scandir(config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION'));
 
-    expect(in_array($exceptions[0].'.d.ts', $syncedEnumFiles))->toBeFalse();
+    expect(in_array($exceptions[0].'.ts', $syncedEnumFiles))->toBeFalse();
 });
