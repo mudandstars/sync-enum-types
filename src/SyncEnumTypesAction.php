@@ -9,6 +9,7 @@ class SyncEnumTypesAction
     public function execute(): void
     {
         $enumFilesDir = config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION');
+
         $enumFiles = scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'));
 
         if ($enumFiles === 2) {
@@ -58,9 +59,15 @@ class SyncEnumTypesAction
 
     private function writeTypescriptFile(array $values, string $filePath): void
     {
+        $folderDestination = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION');
+
+        if (! is_dir($folderDestination)) {
+            mkdir($folderDestination);
+        }
+
         $typeName = trim($filePath, '.php');
 
-        $destinationPath = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION').'/'.$typeName.'.ts';
+        $destinationPath = $folderDestination . '/'.$typeName.'.ts';
 
         file_put_contents($destinationPath, $this->stubContents($typeName, $values));
     }
