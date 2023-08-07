@@ -1,6 +1,7 @@
 <?php
 
-use Mudandstars\SyncEnumTypes\RelativePathAction;
+use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
+
 
 it('returns correct path difference', function (string $fromPath, string $toPath, string $expectedResult) {
     expect(RelativePathAction::execute($fromPath, $toPath))->toBe($expectedResult);

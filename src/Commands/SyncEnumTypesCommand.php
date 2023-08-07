@@ -3,8 +3,8 @@
 namespace Mudandstars\SyncEnumTypes\Commands;
 
 use Illuminate\Console\Command;
-use Mudandstars\SyncEnumTypes\SyncEnumCasesAction;
-use Mudandstars\SyncEnumTypes\SyncEnumTypesAction;
+use Mudandstars\SyncEnumTypes\Actions\SyncEnumCasesAction;
+use Mudandstars\SyncEnumTypes\Actions\SyncEnumTypesAction;
 
 class SyncEnumTypesCommand extends Command
 {

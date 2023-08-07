@@ -1,10 +1,12 @@
 <?php
 
-namespace Mudandstars\SyncEnumTypes;
+namespace Mudandstars\SyncEnumTypes\Actions;
+
+use Mudandstars\SyncEnumTypes\Contracts\SyncEnumAction;
 
 class SyncEnumTypesAction extends SyncEnumAction
 {
-    protected string $stubPath = __DIR__.'/../src/stubs/typescript_type.stub';
+    protected string $stubPath = __DIR__.'/../../src/stubs/typescript_type.stub';
 
     public function __construct()
     {

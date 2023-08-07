@@ -1,8 +1,8 @@
 <?php
 
-use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-use Mudandstars\SyncEnumTypes\RelativePathAction;
+use Illuminate\Support\Facades\Artisan;
+use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
 
 it('does not create any cases files if config is set to false', function () {
     Config::set('sync-enum-types.SYNC_CASES', false);

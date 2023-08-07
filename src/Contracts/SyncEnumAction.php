@@ -1,6 +1,6 @@
 <?php
 
-namespace Mudandstars\SyncEnumTypes;
+namespace Mudandstars\SyncEnumTypes\Contracts;
 
 use Mudandstars\SyncEnumTypes\Services\EnumFilesService;
 use Mudandstars\SyncEnumTypes\Actions\SubstringBetweenAction;

@@ -1,10 +1,13 @@
 <?php
 
-namespace Mudandstars\SyncEnumTypes;
+namespace Mudandstars\SyncEnumTypes\Actions;
+
+use Mudandstars\SyncEnumTypes\Contracts\SyncEnumAction;
+use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
 
 class SyncEnumCasesAction extends SyncEnumAction
 {
-    protected string $stubPath = __DIR__.'/../src/stubs/typescript_cases.stub';
+    protected string $stubPath = __DIR__.'/../../src/stubs/typescript_cases.stub';
 
     public function __construct()
     {
