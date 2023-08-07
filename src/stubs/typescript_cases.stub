@@ -1,5 +1,4 @@
 import { {{ NAME }} } from '{{ RELATIVE_BASE_PATH }}/{{ NAME }}';
-
 export const {{ NAME }}Cases: Array<{{ NAME }}> = [
 
 ];
