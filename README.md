@@ -15,11 +15,6 @@ You can install the package via composer:
 composer require mudandstars/sync-enum-types --dev
 ```
 
-You can publish the config file with:
-
-```bash
-php artisan vendor:publish --tag="sync-enum-types-config"
-```
 
 ## Usage (VS Code)
 
@@ -40,6 +35,30 @@ php artisan vendor:publish --tag="sync-enum-types-config"
 		]
 	}
 }
+```
+
+## Configuration
+
+You can publish the config file with:
+
+```bash
+php artisan vendor:publish --tag="sync-enum-types-config"
+```
+
+The recommended config has SYNC_CASES set to true to provide the enum cases as typed array for use in the frontend.
+Its latest version looks like this:
+
+```php
+// config/sync-enum-types.php
+return [
+    'PHP_ENUM_FOLDER_DESTINATION' => app_path('Enum'),
+    'TYPESCRIPT_ENUM_FOLDER_DESTINATION' => app_path('../resources/ts/types/Enum'),
+
+    'SYNC_CASES' => true,
+    'CASES_FOLDER_DESTINATION' => app_path('../resources/ts/EnumCases'),
+
+    'EXCEPTIONS' => [],
+]
 ```
 
 ## Changelog
