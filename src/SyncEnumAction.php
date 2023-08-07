@@ -2,6 +2,7 @@
 
 namespace Mudandstars\SyncEnumTypes;
 
+use Mudandstars\SyncEnumTypes\Services\EnumFilesService;
 use Mudandstars\SyncEnumTypes\Actions\SubstringBetweenAction;
 
 

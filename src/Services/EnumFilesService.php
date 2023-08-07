@@ -1,6 +1,6 @@
 <?php
 
-namespace Mudandstars\SyncEnumTypes;
+namespace Mudandstars\SyncEnumTypes\Services;
 
 class EnumFilesService
 {
