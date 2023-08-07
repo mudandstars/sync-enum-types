@@ -2,8 +2,7 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
-
-use function Pest\Laravel\withoutExceptionHandling;
+use Mudandstars\SyncEnumTypes\RelativePathAction;
 
 it('does not create any cases files if config is set to false', function () {
     Config::set('sync-enum-types.SYNC_CASES', false);
@@ -33,8 +32,27 @@ it('assigns correct contents to files', function () {
     $typescriptDirPath = config('sync-enum-types.CASES_FOLDER_DESTINATION');
 
     $enum1Content = file_get_contents($typescriptDirPath.'/Enum1.ts');
-    expect($enum1Content)->toEqual("export const Enum1 = [\n\t'first case',\n\t\"second's case\",\n];\n");
+    expect($enum1Content)->toContain("export const Enum1Cases: Array<Enum1> = [\n\t'first case',\n\t\"second's case\",\n];\n");
 
     $enum2Content = file_get_contents($typescriptDirPath.'/Enum2.ts');
-    expect($enum2Content)->toEqual("export const Enum2 = [\n\t'first case second enum',\n\t'second case second enum',\n];\n");
+    expect($enum2Content)->toContain("export const Enum2Cases: Array<Enum2> = [\n\t'first case second enum',\n\t'second case second enum',\n];\n");
+});
+
+it('properly imports the type', function () {
+    Config::set('sync-enum-types.SYNC_CASES', true);
+    Config::set('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION', app_path('../resources/ts/types/Enum'));
+    Config::set('sync-enum-types.CASES_FOLDER_DESTINATION', app_path('../resources/ts/EnumCases'));
+
+    Artisan::call('sync-enum-types');
+
+    $typesPath = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION');
+    $casesPath = config('sync-enum-types.CASES_FOLDER_DESTINATION');
+
+    $importBasePath = RelativePathAction::execute($casesPath, $typesPath);
+
+    $enum1Content = file_get_contents($casesPath.'/Enum1.ts');
+    expect($enum1Content)->toContain("import { Enum1 } from '".$importBasePath."/Enum1';\n");
+
+    $enum2Content = file_get_contents($casesPath.'/Enum2.ts');
+    expect($enum2Content)->toContain("import { Enum2 } from '".$importBasePath."/Enum2';\n");
 });

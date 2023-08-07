@@ -2,8 +2,6 @@
 
 namespace Mudandstars\SyncEnumTypes;
 
-use Mudandstars\SyncEnumTypes\EnumFilesService;
-
 abstract class SyncEnumAction
 {
     protected string $stubPath;
@@ -54,9 +52,9 @@ abstract class SyncEnumAction
         }
 
         $explodedFilePath = explode('/', $filePath);
-        $typeName = trim($explodedFilePath[count($explodedFilePath)- 1 ], '.php');
+        $typeName = trim($explodedFilePath[count($explodedFilePath) - 1], '.php');
 
-        $destinationPath = $this->destinationFolder . '/'.$typeName.'.ts';
+        $destinationPath = $this->destinationFolder.'/'.$typeName.'.ts';
 
         file_put_contents($destinationPath, $this->stubContents($typeName, $values));
     }
