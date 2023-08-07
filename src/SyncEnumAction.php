@@ -2,6 +2,9 @@
 
 namespace Mudandstars\SyncEnumTypes;
 
+use Mudandstars\SyncEnumTypes\Actions\SubstringBetweenAction;
+
+
 abstract class SyncEnumAction
 {
     protected string $stubPath;
@@ -39,9 +42,9 @@ abstract class SyncEnumAction
     private function correctValue(string $line): string
     {
         if (str_contains($line, "';")) {
-            return "'".(new Substring($line))->between("'", "'")."'";
+            return "'".SubstringBetweenAction::execute($line, "'", "'")."'";
         } else {
-            return '"'.(new Substring($line))->between('"', '"').'"';
+            return '"'.SubstringBetweenAction::execute($line, '"', '"').'"';
         }
     }
 
