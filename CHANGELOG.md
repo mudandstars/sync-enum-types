@@ -2,6 +2,10 @@
 
 All notable changes to `sync-enum-types` will be documented in this file.
 
+## Fixed Bug - 2023-08-07
+
+Parsing Issue
+
 ## Includes Type Specifications for Cases Files - 2023-08-07
 
 Synced Cases files are now typed correctly.
