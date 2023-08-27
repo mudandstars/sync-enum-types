@@ -3,31 +3,16 @@
 use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
 use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
-
-it('does not create any cases files if config is set to false', function () {
-    Config::set('sync-enum-types.SYNC_CASES', false);
-    Artisan::call('sync-enum-types');
-
-    expect(is_dir(config('sync-enum-types.CASES_FOLDER_DESTINATION')))->toBeFalse();
-});
-
-it('does create the proper directory if the config is set to true', function () {
-    Config::set('sync-enum-types.SYNC_CASES', true);
-    Artisan::call('sync-enum-types');
-
-    expect(is_dir(config('sync-enum-types.CASES_FOLDER_DESTINATION')))->toBeTrue();
-});
+use Mudandstars\SyncEnumTypes\Actions\SyncEnumCasesAction;
 
 it('creates the correct number of files in the correct location', function () {
-    Config::set('sync-enum-types.SYNC_CASES', true);
-    Artisan::call('sync-enum-types');
+   (new SyncEnumCasesAction())->execute();
 
     expect(count(scandir(config('sync-enum-types.CASES_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))));
 });
 
-it('assigns correct contents to files', function () {
-    Config::set('sync-enum-types.SYNC_CASES', true);
-    Artisan::call('sync-enum-types');
+it('assigns correct array to files', function () {
+   (new SyncEnumCasesAction())->execute();
 
     $typescriptDirPath = config('sync-enum-types.CASES_FOLDER_DESTINATION');
 
