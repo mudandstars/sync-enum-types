@@ -13,7 +13,7 @@ class SyncEnumTypesAction extends SyncEnumAction
         $this->destinationFolder = config('sync-enum-types.TYPESCRIPT_ENUM_FOLDER_DESTINATION');
     }
 
-    public function stubContents(string $fileName, array $values): string
+    public function stubContents(string $fileName, array $casesToValues): string
     {
         $contents = file_get_contents($this->stubPath);
 
@@ -21,7 +21,7 @@ class SyncEnumTypesAction extends SyncEnumAction
             $contents = str_replace('{{ '.$search.' }}', $replace, $contents);
         }
 
-        $possibleTypesString = implode(' | ', $values);
+        $possibleTypesString = implode(' | ', $casesToValues);
 
         return preg_replace('/\r|\n|"""/', '', $contents).$possibleTypesString.';';
     }

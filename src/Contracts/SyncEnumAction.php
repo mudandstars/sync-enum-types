@@ -2,9 +2,8 @@
 
 namespace Mudandstars\SyncEnumTypes\Contracts;
 
-use Mudandstars\SyncEnumTypes\Services\EnumFilesService;
 use Mudandstars\SyncEnumTypes\Actions\SubstringBetweenAction;
-
+use Mudandstars\SyncEnumTypes\Services\EnumFilesService;
 
 abstract class SyncEnumAction
 {
@@ -15,9 +14,9 @@ abstract class SyncEnumAction
     public function execute(): void
     {
         foreach (EnumFilesService::all() as $enumFilePath) {
-            $values = $this->getFileContents($enumFilePath);
+            $casesToValues = $this->getFileContents($enumFilePath);
 
-            $this->writeTypescriptFile($values, $enumFilePath);
+            $this->writeTypescriptFile($casesToValues, $enumFilePath);
         }
     }
 
@@ -25,31 +24,45 @@ abstract class SyncEnumAction
     {
         $file = fopen($filePath, 'r');
 
-        $values = [];
+        $casesToValues = [];
 
         if ($file) {
             while (($line = fgets($file)) !== false) {
                 if (str_contains($line, 'case')) {
-                    array_push($values, $this->correctValue($line));
+                    $caseName = trim(SubstringBetweenAction::execute($line, 'case', '='));
+
+                    $casesToValues[$caseName] = $this->correctValue($line);
                 }
             }
 
             fclose($file);
         }
 
-        return $values;
+        return $casesToValues;
     }
 
     private function correctValue(string $line): string
     {
         if (str_contains($line, "';")) {
             return "'".SubstringBetweenAction::execute($line, "'", "'")."'";
+        } elseif (str_contains($line, '->value') && str_contains($line, '::')) {
+            return $this->usedEnumValue($line);
         } else {
             return '"'.SubstringBetweenAction::execute($line, '"', '"').'"';
         }
     }
 
-    private function writeTypescriptFile(array $values, string $filePath): void
+    private function usedEnumValue(string $line): string
+    {
+        $usedEnumName = trim(SubstringBetweenAction::execute($line, '=', '::'));
+        $usedEnumCase = trim(SubstringBetweenAction::execute($line, '::', '->value'));
+
+        $usedEnumCasesToValues = $this->getFileContents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/'.$usedEnumName.'.php');
+
+        return $usedEnumCasesToValues[$usedEnumCase];
+    }
+
+    private function writeTypescriptFile(array $casesToValues, string $filePath): void
     {
         if (! is_dir($this->destinationFolder)) {
             mkdir($this->destinationFolder);
@@ -60,8 +73,8 @@ abstract class SyncEnumAction
 
         $destinationPath = $this->destinationFolder.'/'.$typeName.'.ts';
 
-        file_put_contents($destinationPath, $this->stubContents($typeName, $values));
+        file_put_contents($destinationPath, $this->stubContents($typeName, $casesToValues));
     }
 
-    abstract public function stubContents(string $fileName, array $values): string;
+    abstract public function stubContents(string $fileName, array $casesToValues): string;
 }

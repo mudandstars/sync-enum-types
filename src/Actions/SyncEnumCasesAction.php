@@ -3,7 +3,6 @@
 namespace Mudandstars\SyncEnumTypes\Actions;
 
 use Mudandstars\SyncEnumTypes\Contracts\SyncEnumAction;
-use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
 
 class SyncEnumCasesAction extends SyncEnumAction
 {
@@ -14,7 +13,7 @@ class SyncEnumCasesAction extends SyncEnumAction
         $this->destinationFolder = config('sync-enum-types.CASES_FOLDER_DESTINATION');
     }
 
-    public function stubContents(string $fileName, array $values): string
+    public function stubContents(string $fileName, array $casesToValues): string
     {
         $contents = file_get_contents($this->stubPath);
 
@@ -25,7 +24,7 @@ class SyncEnumCasesAction extends SyncEnumAction
             $contents = str_replace('{{ '.$search.' }}', $replace, $contents);
         }
 
-        $insert = "\n\t".implode(",\n\t", $values).',';
+        $insert = "\n\t".implode(",\n\t", $casesToValues).',';
 
         $newStr = str_replace("\n\n", $insert."\n", $contents);
 

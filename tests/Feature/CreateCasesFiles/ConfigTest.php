@@ -1,7 +1,7 @@
 <?php
 
-use Illuminate\Support\Facades\Config;
 use Illuminate\Support\Facades\Artisan;
+use Illuminate\Support\Facades\Config;
 
 it('does not create any cases files if config is set to false', function () {
     Config::set('sync-enum-types.SYNC_CASES', false);

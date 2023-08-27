@@ -1,0 +1,8 @@
+<?php
+
+namespace App\Enum;
+
+enum EnumWithLinkedValue: string
+{
+    case CASE1 = Enum1::CASE_1_1->value;
+}
