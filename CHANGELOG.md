@@ -2,6 +2,14 @@
 
 All notable changes to `sync-enum-types` will be documented in this file.
 
+## Feat: Can use other imported Enums - 2023-08-27
+
+When declaring a case like this:
+
+```case TEST_CASE = OtherEnum::SOME_CASE->value;
+```
+the values are now resolved correctly.
+
 ## Fixed Bug - 2023-08-07
 
 Parsing Issue
