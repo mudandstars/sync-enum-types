@@ -26,12 +26,17 @@ abstract class SyncEnumAction
 
         $casesToValues = [];
 
+        $usesCustomMethod = str_contains(file_get_contents($filePath), '// @sync-enum-types: sync-using-method');
         if ($file) {
             while (($line = fgets($file)) !== false) {
-                if (str_contains($line, 'case')) {
+                if ($usesCustomMethod && str_contains($line, 'self::')) {
+                    $caseName = trim(SubstringBetweenAction::execute($line, 'self::', '=>'));
+
+                    $casesToValues[$caseName] = $this->correctValueDescriptionInForMethod($line);
+                } elseif (! $usesCustomMethod && str_contains($line, 'case') && str_contains($line, 'case') && str_contains($line, ';')) {
                     $caseName = trim(SubstringBetweenAction::execute($line, 'case', '='));
 
-                    $casesToValues[$caseName] = $this->correctValue($line);
+                    $casesToValues[$caseName] = $this->correctValueForDescriptionInCase($line);
                 }
             }
 
@@ -41,14 +46,21 @@ abstract class SyncEnumAction
         return $casesToValues;
     }
 
-    private function correctValue(string $line): string
+    private function correctValueForDescriptionInCase(string $line): string
     {
-        if (str_contains($line, "';")) {
-            return "'".SubstringBetweenAction::execute($line, "'", "'")."'";
-        } elseif (str_contains($line, '->value') && str_contains($line, '::')) {
+        if (str_contains($line, '->value') && str_contains($line, '::')) {
             return $this->usedEnumValue($line);
         } else {
-            return '"'.SubstringBetweenAction::execute($line, '"', '"').'"';
+            return trim(SubstringBetweenAction::execute($line, '=', ';'));
+        }
+    }
+
+    private function correctValueDescriptionInForMethod(string $line): string
+    {
+        if (str_contains($line, ',')) {
+            return trim(SubstringBetweenAction::execute($line, '=>', ','));
+        } else {
+            return trim(SubstringBetweenAction::execute($line, '=>', "\n"));
         }
     }
 

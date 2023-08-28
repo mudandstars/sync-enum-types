@@ -41,13 +41,9 @@ class TestCase extends Orchestra
 
     private function createEnumFilesInBackend(): void
     {
-        $firstEnumContents = file_get_contents(__DIR__.'/../src/stubs/enum1.stub');
-        $secondEnumContents = file_get_contents(__DIR__.'/../src/stubs/enum2.stub');
-        $enumWithLinkedValueContents = file_get_contents(__DIR__.'/../src/stubs/enumWithLinkedValue.stub');
-
-        file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/Enum1.php', $firstEnumContents);
-        file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/Enum2.php', $secondEnumContents);
-        file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/EnumWithLinkedValue.php', $enumWithLinkedValueContents);
+        foreach (['enum1', 'enum2', 'enumWithLinkedValue', 'enumWithDescriptionsInMethodWithFlag', 'enumWithDescriptionsInMethodWithoutFlag'] as $enumName) {
+            file_put_contents(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION').'/'.ucfirst($enumName).'.php', file_get_contents(__DIR__.'/../src/stubs/'.$enumName.'.stub'));
+        }
     }
 
     private function removeEnumFilesAndFiles(): void

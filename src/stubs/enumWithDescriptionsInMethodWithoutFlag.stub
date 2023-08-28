@@ -1,0 +1,17 @@
+<?php
+
+namespace App\Enum;
+
+enum EnumWithDescriptionsInMethodWithouFlag: number
+{
+    case CASE1 = 1;
+    case CASE2 = 2;
+
+   public function description(): string
+   {
+        return match($this) {
+            self::CASE1 => 'first case description',
+            self::CASE2 => 'second case description',
+        };
+   }
+}

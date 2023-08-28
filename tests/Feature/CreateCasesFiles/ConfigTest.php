@@ -2,6 +2,13 @@
 
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Config;
+use Mudandstars\SyncEnumTypes\Actions\SyncEnumCasesAction;
+
+it('creates the correct number of files in the correct location', function () {
+    (new SyncEnumCasesAction())->execute();
+
+    expect(count(scandir(config('sync-enum-types.CASES_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))));
+});
 
 it('does not create any cases files if config is set to false', function () {
     Config::set('sync-enum-types.SYNC_CASES', false);

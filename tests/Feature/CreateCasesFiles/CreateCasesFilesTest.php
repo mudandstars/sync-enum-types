@@ -5,12 +5,6 @@ use Illuminate\Support\Facades\Config;
 use Mudandstars\SyncEnumTypes\Actions\RelativePathAction;
 use Mudandstars\SyncEnumTypes\Actions\SyncEnumCasesAction;
 
-it('creates the correct number of files in the correct location', function () {
-    (new SyncEnumCasesAction())->execute();
-
-    expect(count(scandir(config('sync-enum-types.CASES_FOLDER_DESTINATION'))))->toBe(count(scandir(config('sync-enum-types.PHP_ENUM_FOLDER_DESTINATION'))));
-});
-
 it('assigns correct array to files', function () {
     (new SyncEnumCasesAction())->execute();
 

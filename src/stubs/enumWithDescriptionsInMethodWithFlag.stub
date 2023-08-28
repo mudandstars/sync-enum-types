@@ -1,0 +1,18 @@
+<?php
+
+namespace App\Enum;
+
+// @sync-enum-types: sync-using-method
+enum EnumWithDescriptionsInMethodWithFlag: number
+{
+    case CASE1 = 1;
+    case CASE2 = 2;
+
+   public function description(): string
+   {
+        return match($this) {
+            self::CASE1 => 'first case description',
+            self::CASE2 => 'second case description',
+        };
+   }
+}
