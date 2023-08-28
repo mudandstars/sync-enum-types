@@ -2,11 +2,14 @@
 
 namespace Mudandstars\SyncEnumTypes\Contracts;
 
+use Mudandstars\SyncEnumTypes\Actions\LinesBetweenBracesAction;
 use Mudandstars\SyncEnumTypes\Actions\SubstringBetweenAction;
 use Mudandstars\SyncEnumTypes\Services\EnumFilesService;
 
 abstract class SyncEnumAction
 {
+    const SYNC_USING_METHOD_TRIGGER = '// @sync-enum-types: sync-using-method';
+
     protected string $stubPath;
 
     protected string $destinationFolder;
@@ -22,25 +25,26 @@ abstract class SyncEnumAction
 
     private function getFileContents(string $filePath): array
     {
-        $file = fopen($filePath, 'r');
-
         $casesToValues = [];
 
-        $usesCustomMethod = str_contains(file_get_contents($filePath), '// @sync-enum-types: sync-using-method');
-        if ($file) {
-            while (($line = fgets($file)) !== false) {
+        $usesCustomMethod = str_contains(file_get_contents($filePath), self::SYNC_USING_METHOD_TRIGGER);
+
+        $lines = $usesCustomMethod
+            ? LinesBetweenBracesAction::execute($filePath, self::SYNC_USING_METHOD_TRIGGER)
+            : file($filePath);
+
+        if ($lines) {
+            foreach ($lines as $line) {
                 if ($usesCustomMethod && str_contains($line, 'self::')) {
-                    $caseName = trim(SubstringBetweenAction::execute($line, 'self::', '=>'));
+                    $caseName = SubstringBetweenAction::execute($line, 'self::', '=>');
 
                     $casesToValues[$caseName] = $this->correctValueDescriptionInForMethod($line);
                 } elseif (! $usesCustomMethod && str_contains($line, 'case') && str_contains($line, 'case') && str_contains($line, ';')) {
-                    $caseName = trim(SubstringBetweenAction::execute($line, 'case', '='));
+                    $caseName = SubstringBetweenAction::execute($line, 'case', '=');
 
                     $casesToValues[$caseName] = $this->correctValueForDescriptionInCase($line);
                 }
             }
-
-            fclose($file);
         }
 
         return $casesToValues;

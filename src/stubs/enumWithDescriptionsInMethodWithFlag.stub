@@ -2,17 +2,25 @@
 
 namespace App\Enum;
 
-// @sync-enum-types: sync-using-method
 enum EnumWithDescriptionsInMethodWithFlag: number
 {
     case CASE1 = 1;
     case CASE2 = 2;
 
-   public function description(): string
-   {
+    // @sync-enum-types: sync-using-method
+    public function description(): string
+    {
         return match($this) {
             self::CASE1 => 'first case description',
             self::CASE2 => 'second case description',
         };
-   }
+    }
+
+    public function otherMethod(): string
+    {
+        return match($this) {
+            self::CASE1 => 'some unrelated non-descriptive value,
+            self::CASE2 => 'some other unrelated non-descriptive value,
+        }
+    }
 }

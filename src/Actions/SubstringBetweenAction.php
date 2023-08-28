@@ -8,7 +8,7 @@ class SubstringBetweenAction
     {
         $ini = strpos($fullString, $start);
 
-        if ($ini == 0) {
+        if ($ini === false) {
             return '';
         }
 
@@ -16,6 +16,6 @@ class SubstringBetweenAction
 
         $len = strpos($fullString, $end, $ini) - $ini;
 
-        return substr($fullString, $ini, $len);
+        return trim(substr($fullString, $ini, $len));
     }
 }
