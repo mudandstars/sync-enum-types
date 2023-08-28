@@ -61,6 +61,52 @@ return [
 ]
 ```
 
+## Possible Enum Features and Flags
+### Using Custom Method's Description
+To avoid conflicts with existing data when changing Enum values in your database, some engineers prefer to use simple integers as their values and make use of functions to describe what the values represent, like the following:
+```php
+enum MyEnum: int
+{
+    case FIRST_CASE = 1;
+    case SECOND_CASE = 2;
+
+    public function description(): string
+    {
+        return match($this) {
+            self::FIRST_CASE => 'first case description',
+            self::SECOND_CASE => 'second case description',
+        };
+    }
+
+    public function someOtherFunction()...
+}
+```
+If you want to sync the descriptions from an Enum's method instead of its cases' values, put the sync-using-method flag above the corresponding function like so:
+```php
+enum MyEnum: int
+{
+    case FIRST_CASE = 1;
+    case SECOND_CASE = 2;
+
+    // @sync-enum-types: sync-using-method
+    public function description(): string
+    {
+        return match($this) {
+            self::FIRST_CASE => 'first case description',
+            self::SECOND_CASE => 'second case description',
+        };
+    }
+
+    public function someOtherFunction()...
+}
+```
+### Linking Other Enums
+To maintain a single source of truth when using many Enums, sometimes it is necessary to define a case like this:
+```php
+    case MY_CASE = MyOtherEnum::ITS_CASE->value;
+```
+This is automatically handled correctly and resolves the value of the other Enum, as long as its source file also resides in the same directory.
+
 ## Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information on what has changed recently.
